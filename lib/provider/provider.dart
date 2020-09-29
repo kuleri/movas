@@ -13,29 +13,26 @@ class StaticProvider {
 }
 
 /// [T] Is Store that you are providing, and [U] is observable
-class StoreProvider<T extends BaseStore, U> extends StatelessWidget {
+class StoreProvider<T extends BaseStore, U> extends MultiProvider {
   final Widget child;
   final T Function(BuildContext) store;
 
-  const StoreProvider({
-    @required this.child,
+  StoreProvider({
+    this.child,
     @required this.store,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return MultiProvider(
-      child: child,
-      providers: [
-        Provider<T>(
-            create: store, dispose: (context, store) => store.dispose()),
-        StreamProvider<U>(
-          create: (context) =>
-              StaticProvider.of<T>(context).o$[U] as BehaviorSubject<U>,
-        )
-      ],
-    );
-  }
+  })  : assert(U != null),
+        assert(T != null),
+        super(
+          child: child,
+          providers: [
+            Provider<T>(
+                create: store, dispose: (context, store) => store.dispose()),
+            StreamProvider<U>(
+              create: (context) =>
+                  StaticProvider.of<T>(context).o$[U] as BehaviorSubject<U>,
+            )
+          ],
+        );
 }
 
 /// [T] Is Store that you are providing, and [U] and [I] are observables
