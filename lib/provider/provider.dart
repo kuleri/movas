@@ -15,18 +15,19 @@ class StaticProvider {
 /// [T] Is Store that you are providing, and [U] is observable
 class StoreProvider<T extends BaseStore, U> extends MultiProvider {
   final Widget child;
-  final T Function(BuildContext) store;
+  final T Function(BuildContext) storeBuilder;
 
   StoreProvider({
     this.child,
-    @required this.store,
+    @required this.storeBuilder,
   })  : assert(U != null),
         assert(T != null),
         super(
           child: child,
           providers: [
             Provider<T>(
-                create: store, dispose: (context, store) => store.dispose()),
+                create: storeBuilder,
+                dispose: (context, store) => store.dispose()),
             StreamProvider<U>(
               create: (context) =>
                   StaticProvider.of<T>(context).o$[U] as BehaviorSubject<U>,
@@ -36,33 +37,33 @@ class StoreProvider<T extends BaseStore, U> extends MultiProvider {
 }
 
 /// [T] Is Store that you are providing, and [U] and [I] are observables
-class StoreProvider2<T extends BaseStore, U, I> extends StatelessWidget {
+class StoreProvider2<T extends BaseStore, U, I> extends MultiProvider {
   final Widget child;
   final T Function(BuildContext) storeBuilder;
 
-  const StoreProvider2({
+  StoreProvider2({
     @required this.child,
     @required this.storeBuilder,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return MultiProvider(
-      child: child,
-      providers: [
-        Provider<T>(
-            create: storeBuilder, dispose: (context, store) => store.dispose()),
-        StreamProvider<U>(
-          create: (context) =>
-              StaticProvider.of<T>(context).o$[U] as BehaviorSubject<U>,
-        ),
-        StreamProvider<I>(
-          create: (context) =>
-              StaticProvider.of<T>(context).o$[I] as BehaviorSubject<I>,
-        ),
-      ],
-    );
-  }
+  })  : assert(U != null),
+        assert(I != null),
+        assert(T != null),
+        assert(U != I),
+        super(
+          child: child,
+          providers: [
+            Provider<T>(
+                create: storeBuilder,
+                dispose: (context, store) => store.dispose()),
+            StreamProvider<U>(
+              create: (context) =>
+                  StaticProvider.of<T>(context).o$[U] as BehaviorSubject<U>,
+            ),
+            StreamProvider<I>(
+              create: (context) =>
+                  StaticProvider.of<T>(context).o$[I] as BehaviorSubject<I>,
+            ),
+          ],
+        );
 }
 
 abstract class BaseStore {
@@ -90,16 +91,18 @@ abstract class BaseStore {
 }
 
 abstract class Store<T> extends BaseStore {
-  Map<Type, BehaviorSubject> _observables$ = {T: BehaviorSubject<T>()};
+  Map<Type, BehaviorSubject> _o$ = {
+    T: BehaviorSubject<T>(sync: true),
+  };
 
   @override
-  Map<Type, BehaviorSubject> get o$ => _observables$;
+  Map<Type, BehaviorSubject> get o$ => _o$;
 }
 
 abstract class Store2<T, U> extends BaseStore {
   Map<Type, BehaviorSubject> _o$ = {
-    T: BehaviorSubject<T>(),
-    U: BehaviorSubject<U>()
+    T: BehaviorSubject<T>(sync: true),
+    U: BehaviorSubject<U>(sync: true)
   };
 
   @override
