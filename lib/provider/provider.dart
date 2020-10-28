@@ -57,11 +57,12 @@ class StoreProvider2<T extends BaseStore, U, I> extends MultiProvider {
             StreamProvider<U>(
               create: (context) =>
                   StaticProvider.of<T>(context).o$[U] as BehaviorSubject<U>,
+              lazy: false,
             ),
             StreamProvider<I>(
-              create: (context) =>
-                  StaticProvider.of<T>(context).o$[I] as BehaviorSubject<I>,
-            ),
+                create: (context) =>
+                    StaticProvider.of<T>(context).o$[I] as BehaviorSubject<I>,
+                lazy: false),
           ],
         );
 }
@@ -77,7 +78,9 @@ abstract class BaseStore {
     _listeners.add(stream.listen(callback));
   }
 
-  ///add stuff to stream. type inherence should work
+  ///add stuff to stream. type inherence works
+  Future<void> addAsync<T>(T event) => Future(() => o$[T].add(event));
+
   void add<T>(T event) => o$[T].add(event);
 
   void dispose() {
