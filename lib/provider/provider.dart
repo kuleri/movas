@@ -27,8 +27,10 @@ class StoreProvider<T extends BaseStore, U> extends MultiProvider {
           providers: [
             Provider<T>(
                 create: storeBuilder,
+                lazy: false,
                 dispose: (context, store) => store.dispose()),
             StreamProvider<U>(
+              lazy: false,
               create: (context) =>
                   StaticProvider.of<T>(context).o$[U] as BehaviorSubject<U>,
             )
