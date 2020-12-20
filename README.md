@@ -2,6 +2,8 @@
 
 Movas framework tools
 
+The best framework for Flutter development.
+
 ## Getting Started
 
 This project is a starting point for a Dart
