@@ -113,3 +113,27 @@ abstract class Store2<T, U> extends BaseStore {
   @override
   Map<Type, BehaviorSubject> get o$ => _o$;
 }
+
+class MyStoreProvider<T extends BaseStore, U> extends MultiProvider {
+  final Widget child;
+  final T Function(BuildContext) storeBuilder;
+
+  MyStoreProvider({
+    this.child,
+    @required this.storeBuilder,
+  })  : assert(U != null),
+        assert(T != null),
+        super(
+        child: child,
+        providers: [
+          Provider<T>(
+              lazy: false,
+              create: storeBuilder,
+              dispose: (context, store) => store.dispose()),
+          StreamProvider<U>(
+              lazy: false,
+              create: (context) =>
+              StaticProvider.of<T>(context).o$[U] as BehaviorSubject<U>)
+        ],
+      );
+}
