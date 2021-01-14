@@ -2,18 +2,16 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
-import 'package:flutter/material.dart';
 import 'package:movas_example/config/config.dart';
 import 'package:movas_example/helper/logger.dart';
 
 class AppHttpService {
-  final BuildContext context;
   DioCacheManager _dioCacheManager = DioCacheManager(CacheConfig());
   var dio = Dio();
 
   Options _cacheOptions = buildCacheOptions(null);
 
-  AppHttpService(this.context, {String baseUrl = Config.PRODUCTION_URL}) {
+  AppHttpService({String baseUrl = Config.PRODUCTION_URL}) {
     dio.options.baseUrl = baseUrl;
     dio.options.connectTimeout = 200000;
     dio.options.receiveTimeout = 50000;

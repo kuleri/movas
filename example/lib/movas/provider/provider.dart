@@ -25,7 +25,7 @@ List<SingleChildWidget> streamProviders = [
 
 List<SingleChildWidget> serviceProviders = [
   Provider<AppHttpService>(
-    create: (context) => AppHttpService(context),
+    create: (context) => AppHttpService(),
   ),
 ];
 
