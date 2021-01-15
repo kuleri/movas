@@ -7,8 +7,4 @@ abstract class PostsService {
   final PublishSubject<FeedItemsResponse> feedItemsResponse$;
 
   Future<void> getPosts();
-
-  void emptyItems() {
-    feedItemsResponse$.add(FeedItemsResponse.empty());
-  }
 }

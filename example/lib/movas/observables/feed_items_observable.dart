@@ -1,9 +1,7 @@
 import 'dart:convert';
-
 import 'package:flutter/foundation.dart';
 
 import 'package:movas_example/movas/services/responses/feed_items.dart';
-
 import 'feed_item_observable.dart';
 
 class FeedItemsO {

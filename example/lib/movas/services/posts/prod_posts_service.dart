@@ -11,7 +11,6 @@ class ProdPostsService extends PostsService {
 
   @override
   Future<void> getPosts() async {
-    emptyItems();
     final response = await appHttpService.getPosts();
     final feedItemsResponse = FeedItemsResponse.fromList(response.data);
     feedItemsResponse$.add(feedItemsResponse);

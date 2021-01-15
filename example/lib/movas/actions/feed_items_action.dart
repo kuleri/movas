@@ -1,13 +1,13 @@
 import 'package:movas/provider/provider.dart';
-import 'package:movas_example/movas/observables/app_config_observable.dart';
+import 'package:movas_example/movas/services/posts/posts_service.dart';
 
 class FeedItemsA {
-  FeedItemsA(this.appConfigO);
+  FeedItemsA(this.postsService);
 
-  final AppConfigO appConfigO;
+  final PostsService postsService;
 
   Future<void> getPosts() {
-    return appConfigO.postsService.getPosts();
+    return postsService.getPosts();
   }
 
   factory FeedItemsA.of(context) => FeedItemsA(
