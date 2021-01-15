@@ -37,7 +37,7 @@ class _HomePageState extends State<HomePage> {
                       ? CustomLoadingIndicator()
                       : ListView.separated(
                           itemBuilder: (context, index) =>
-                              PostTile(item: feedItemsO?.items[index]),
+                              PostTile(feedItemO: feedItemsO?.items[index]),
                           separatorBuilder: (context, index) => Divider(),
                           itemCount: feedItemsO.items.length,
                         ),

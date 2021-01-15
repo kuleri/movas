@@ -1,38 +1,32 @@
 import 'dart:convert';
 
+import 'package:movas_example/movas/services/responses/feed_item.dart';
+
 class FeedItemO {
   FeedItemO({
-    this.id,
-    this.userId,
-    this.title,
-    this.body,
+    this.item,
   });
+  final FeedItem item;
 
-  final int id;
-  final int userId;
-  final String title;
-  final String body;
+  factory FeedItemO.fromE(FeedItem feedItem) => FeedItemO(
+          item: FeedItem(
+        id: feedItem.id,
+        userId: feedItem.userId,
+        title: feedItem.title,
+        body: feedItem.body,
+      ));
 
   FeedItemO copyWith({
-    int id,
-    int userId,
-    String title,
-    String body,
+    FeedItem item,
   }) {
     return FeedItemO(
-      id: id ?? this.id,
-      userId: userId ?? this.userId,
-      title: title ?? this.title,
-      body: body ?? this.body,
+      item: item ?? this.item,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
-      'userId': userId,
-      'title': title,
-      'body': body,
+      'item': item?.toMap(),
     };
   }
 
@@ -40,10 +34,7 @@ class FeedItemO {
     if (map == null) return null;
 
     return FeedItemO(
-      id: map['id'],
-      userId: map['userId'],
-      title: map['title'],
-      body: map['body'],
+      item: FeedItem.fromMap(map['item']),
     );
   }
 
@@ -53,23 +44,15 @@ class FeedItemO {
       FeedItemO.fromMap(json.decode(source));
 
   @override
-  String toString() {
-    return 'FeedItemO(id: $id, userId: $userId, title: $title, body: $body)';
-  }
+  String toString() => 'FeedItemO(item: $item)';
 
   @override
   bool operator ==(Object o) {
     if (identical(this, o)) return true;
 
-    return o is FeedItemO &&
-        o.id == id &&
-        o.userId == userId &&
-        o.title == title &&
-        o.body == body;
+    return o is FeedItemO && o.item == item;
   }
 
   @override
-  int get hashCode {
-    return id.hashCode ^ userId.hashCode ^ title.hashCode ^ body.hashCode;
-  }
+  int get hashCode => item.hashCode;
 }
