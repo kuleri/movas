@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:movas_example/movas/actions/feed_items_action.dart';
+import 'package:movas_example/movas/actions/bootstrap_action.dart';
 import 'package:movas_example/movas/observables/feed_items_observable.dart';
 import 'package:movas_example/movas/ui/widgets/custom_loading_indicator.dart';
 import 'package:movas_example/movas/ui/widgets/post_tile.dart';
@@ -14,9 +14,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      FeedItemsA.of(context).getPosts();
-    });
+    _initializeApp();
   }
 
   @override
@@ -48,5 +46,11 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
+  }
+
+  void _initializeApp() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      BootstrapAction.of(context).initializeApp();
+    });
   }
 }

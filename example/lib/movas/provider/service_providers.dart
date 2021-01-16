@@ -9,6 +9,7 @@ List<SingleChildWidget> serviceProviders = [
   Provider<AppHttpService>(
     create: (context) => AppHttpService(),
   ),
+
   // To switch the service, we only need to provide mock service instead of prod service
   Provider<PostsService>(
     create: (context) => ProdPostsService(
