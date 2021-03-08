@@ -54,6 +54,7 @@ class StoreProvider2<T extends BaseStore, U, I> extends MultiProvider {
           child: child,
           providers: [
             Provider<T>(
+              lazy: false,
                 create: storeBuilder,
                 dispose: (context, store) => store.dispose()),
             StreamProvider<U>(
@@ -134,6 +135,33 @@ class MyStoreProvider<T extends BaseStore, U> extends MultiProvider {
               lazy: false,
               create: (context) =>
               StaticProvider.of<T>(context).o$[U] as BehaviorSubject<U>)
+        ],
+      );
+}
+class MyStoreProvider2<T extends BaseStore, U, S> extends MultiProvider {
+  final Widget child;
+  final T Function(BuildContext) storeBuilder;
+
+  MyStoreProvider2({
+    this.child,
+    @required this.storeBuilder,
+  })  : assert(U != null),
+        assert(T != null),
+        super(
+        child: child,
+        providers: [
+          Provider<T>(
+              lazy: false,
+              create: storeBuilder,
+              dispose: (context, store) => store.dispose()),
+          StreamProvider<U>(
+              lazy: false,
+              create: (context) =>
+              StaticProvider.of<T>(context).o$[U] as BehaviorSubject<U>),
+          StreamProvider<S>(
+              lazy: false,
+              create: (context) =>
+              StaticProvider.of<T>(context).o$[S] as BehaviorSubject<S>)
         ],
       );
 }
