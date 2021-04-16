@@ -114,6 +114,16 @@ abstract class Store2<T, U> extends BaseStore {
   @override
   Map<Type, BehaviorSubject> get o$ => _o$;
 }
+abstract class Store3<T, U,A> extends BaseStore {
+  Map<Type, BehaviorSubject> _o$ = {
+    T: BehaviorSubject<T>(sync: true),
+    U: BehaviorSubject<U>(sync: true),
+    A: BehaviorSubject<A>(sync: true)
+  };
+
+  @override
+  Map<Type, BehaviorSubject> get o$ => _o$;
+}
 
 class MyStoreProvider<T extends BaseStore, U> extends MultiProvider {
   final Widget child;
@@ -162,6 +172,41 @@ class MyStoreProvider2<T extends BaseStore, U, S> extends MultiProvider {
               lazy: false,
               create: (context) =>
               StaticProvider.of<T>(context).o$[S] as BehaviorSubject<S>)
+        ],
+      );
+}
+
+
+
+
+class MyStoreProvider3<T extends BaseStore, U, S,A> extends MultiProvider {
+  final Widget child;
+  final T Function(BuildContext) storeBuilder;
+
+  MyStoreProvider3({
+    this.child,
+    @required this.storeBuilder,
+  })  : assert(U != null),
+        assert(T != null),
+        super(
+        child: child,
+        providers: [
+          Provider<T>(
+              lazy: false,
+              create: storeBuilder,
+              dispose: (context, store) => store.dispose()),
+          StreamProvider<U>(
+              lazy: false,
+              create: (context) =>
+              StaticProvider.of<T>(context).o$[U] as BehaviorSubject<U>),
+          StreamProvider<S>(
+              lazy: false,
+              create: (context) =>
+              StaticProvider.of<T>(context).o$[S] as BehaviorSubject<S>),
+          StreamProvider<A>(
+              lazy: false,
+              create: (context) =>
+              StaticProvider.of<T>(context).o$[A] as BehaviorSubject<A>)
         ],
       );
 }
