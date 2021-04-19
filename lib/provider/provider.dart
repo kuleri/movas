@@ -128,7 +128,7 @@ abstract class Store4<T, U,A,C> extends BaseStore {
   Map<Type, BehaviorSubject> _o$ = {
     T: BehaviorSubject<T>(sync: true),
     U: BehaviorSubject<U>(sync: true),
-    A: BehaviorSubject<A>(sync: true)
+    A: BehaviorSubject<A>(sync: true),
     C: BehaviorSubject<C>(sync: true)
   };
 
